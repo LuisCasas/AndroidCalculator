@@ -10,11 +10,13 @@ import android.widget.TextView;
 public class CalcActivity extends Activity {
 
     TextView resultView;
+    TextView calcView;
 
     public enum Operation {
         ADD, SUBTRACT, DIVIDE, MULTIPLY, EQUAL
     }
 
+    String calculationString = "";
     String currentNumber = "";
     String leftValue = "";
     String rightValue = "";
@@ -47,6 +49,9 @@ public class CalcActivity extends Activity {
 
         resultView = (TextView)findViewById(R.id.resultText);
         resultView.setText("");
+
+        calcView = (TextView)findViewById(R.id.calculationText);
+        calcView.setText("");
 
         oneBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -159,9 +164,12 @@ public class CalcActivity extends Activity {
                 leftValue = "";
                 rightValue = "";
                 currentNumber = "";
+                calculationString = "";
                 result = 0;
                 currentOperation = null;
                 resultView.setText("0");
+                calcView.setText("");
+
             }
         });
 
@@ -192,16 +200,40 @@ public class CalcActivity extends Activity {
                 leftValue = String.valueOf(result);
                 resultView.setText(leftValue);
             }
+
+            calcView.setText(calculationString);
         } else {
             leftValue = currentNumber;
             currentNumber = "";
+
         }
 
+        switch (operation){
+            case ADD:
+                calculationString += " + ";
+                break;
+            case DIVIDE:
+                calculationString += " / ";
+                break;
+            case MULTIPLY:
+                calculationString += " * ";
+                break;
+            case SUBTRACT:
+                calculationString += " - ";
+                break;
+            case EQUAL:
+                calculationString = "";
+                break;
+        }
+
+        calcView.setText(calculationString);
         currentOperation = operation;
     }
 
     void numberPressed(int number){
         currentNumber += String.valueOf(number);
+        calculationString += String.valueOf(number);
         resultView.setText(currentNumber);
     }
+
 }
